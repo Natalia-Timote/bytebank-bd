@@ -1,8 +1,9 @@
+import { Armazenador } from "../utils/Armazenador.js";
 import { TipoTransacao } from "./TipoTransacao.js";
 export class Conta {
     nome;
-    saldo = JSON.parse(localStorage.getItem('saldo')) || 0;
-    transacoes = JSON.parse(localStorage.getItem('transacoes'), (key, value) => {
+    saldo = Armazenador.obter('Saldo') || 0;
+    transacoes = Armazenador.obter(('transacoes'), (key, value) => {
         if (key === 'data') {
             return new Date(value);
         }
@@ -10,6 +11,9 @@ export class Conta {
     }) || [];
     constructor(nome) {
         this.nome = nome;
+    }
+    getTitular() {
+        return this.nome;
     }
     getGruposTransacoes() {
         const gruposTransacoes = [];
@@ -48,7 +52,7 @@ export class Conta {
         }
         this.transacoes.push(novaTransacao);
         console.log(this.getGruposTransacoes());
-        localStorage.setItem("transacoes", JSON.stringify(this.transacoes));
+        Armazenador.salvar("transacoes", JSON.stringify(this.transacoes));
     }
     debitar(valor) {
         if (valor <= 0) {
@@ -58,15 +62,25 @@ export class Conta {
             throw new Error("Saldo insuficiente!");
         }
         this.saldo -= valor;
-        localStorage.setItem("saldo", this.saldo.toString());
+        Armazenador.salvar("saldo", this.saldo.toString());
     }
     depositar(valor) {
         if (valor <= 0) {
             throw new Error("O valor a ser depositado deve ser maior que zero!");
         }
         this.saldo += valor;
-        localStorage.setItem("saldo", this.saldo.toString());
+        Armazenador.salvar("saldo", this.saldo.toString());
+    }
+}
+export class ContaPremium extends Conta {
+    registrarTransacao(transacao) {
+        if (transacao.tipoTransacao === TipoTransacao.DEPOSITO) {
+            console.log('Parabéns, você ganhou um bônus!');
+            transacao.valor += 0.5;
+        }
+        this.registrarTransacao(transacao);
     }
 }
 const conta = new Conta('Joana S. Oliveira');
+const contaPremium = new ContaPremium('Joana S. Oliveira');
 export default conta;
