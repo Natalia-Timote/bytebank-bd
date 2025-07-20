@@ -18,7 +18,7 @@ O foco foi refatorar código de paradigma funcional para **orientação a objeto
 
 * Compreender as características do **paradigma funcional e de orientação a objetos com Typescript**;
 * Aprender a construir **classes e métodos**;
-* Saber como utilizar **modificadores de acesso** para melhorar a segurança do seu projeto;
+* Saber como utilizar **modificadores de acesso** para melhorar a segurança do projeto;
 * Conhecer o conceito de **herança** para construir novas classes sem repetir código;
 * Realizar a implementação de validações a partir de **decorators**.
 
